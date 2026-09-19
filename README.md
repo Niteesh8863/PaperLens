@@ -47,6 +47,8 @@ GitHub Pages can host the static React frontend, but it cannot run FastAPI, Post
 
 The repository includes `render.yaml`. In Render, choose **New → Blueprint**, connect `Niteesh8863/PaperLens`, and apply the blueprint. It creates the API, Celery worker, PostgreSQL database, and Redis service. Copy the generated `paperlens-api` HTTPS URL into the GitHub repository variable `VITE_API_URL`, then rerun the Pages workflow. The API must allow the Pages origin through `CORS_ORIGINS`; the blueprint sets this automatically.
 
+[![Deploy backend with Render](https://render.com/images/deploy-to-render-button.svg)](https://dashboard.render.com/blueprint/new?repo=https://github.com/Niteesh8863/PaperLens)
+
 The included `.github/workflows/deploy-pages.yml` builds and deploys the frontend automatically on pushes to `main`. Enable **Settings → Pages → Source: GitHub Actions** once after creating the repository. The resulting URL is:
 
 ```text
