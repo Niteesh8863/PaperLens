@@ -1,0 +1,49 @@
+services:
+  - type: web
+    name: paperlens-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paperlens-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: paperlens-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://niteesh8863.github.io
+  - type: worker
+    name: paperlens-worker
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    dockerCommand: celery -A app.tasks.celery_app worker --loglevel=info
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: paperlens-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: paperlens-redis
+          property: connectionString
+      - key: JWT_SECRET
+        fromService:
+          type: web
+          name: paperlens-api
+          envVarKey: JWT_SECRET
+  - type: redis
+    name: paperlens-redis
+    plan: free
+    ipAllowList: []
+databases:
+  - name: paperlens-db
+    plan: free

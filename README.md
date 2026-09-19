@@ -43,6 +43,10 @@ The extraction pipeline is deliberately an abstraction: replace `backend/app/pip
 
 GitHub Pages can host the static React frontend, but it cannot run FastAPI, PostgreSQL, Redis, or Celery. Deploy those backend services separately (for example on a container host), then add the public API origin as a repository variable named `VITE_API_URL` under **Settings → Secrets and variables → Actions → Variables**.
 
+### Render deployment
+
+The repository includes `render.yaml`. In Render, choose **New → Blueprint**, connect `Niteesh8863/PaperLens`, and apply the blueprint. It creates the API, Celery worker, PostgreSQL database, and Redis service. Copy the generated `paperlens-api` HTTPS URL into the GitHub repository variable `VITE_API_URL`, then rerun the Pages workflow. The API must allow the Pages origin through `CORS_ORIGINS`; the blueprint sets this automatically.
+
 The included `.github/workflows/deploy-pages.yml` builds and deploys the frontend automatically on pushes to `main`. Enable **Settings → Pages → Source: GitHub Actions** once after creating the repository. The resulting URL is:
 
 ```text
